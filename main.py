@@ -5,11 +5,11 @@ from pandas import read_csv, DataFrame
 
 start_time = time()
 
-n = 28
+df = read_csv('.//input_with_weights.csv', header=None, delimiter=',')
+ws = df.iloc[-1].values
+comp_matrix = df.iloc[:-1].values
 
-df = read_csv('C://Users//Long$//PythonProjects//PTRadar2024//examples_(corrected_solution)_28.txt')
-ws = df.iloc[4].str.split(' +', expand=True).values[0, 1:].astype(float)
-comp_matrix = df.iloc[6:34, 0].str.split(' +', expand=True).values[:, 1:].astype(float)
+n = ws.shape[0]
 
 # comp_matrix = np.array([
 #     [0., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 0., 0., 0., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.],
@@ -110,3 +110,8 @@ print(glob_hyp, (glob_hyp*ws).sum())
 
 stop_time = time()
 print(f'{stop_time - start_time:10.8f}')
+
+out_df = DataFrame([glob_hyp])
+out_df.columns = 'TH' + (out_df.columns + 1).astype(str)
+out_df['sum'] = (glob_hyp*ws).sum()
+out_df.to_csv('output.csv')
